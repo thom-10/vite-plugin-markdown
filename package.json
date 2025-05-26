@@ -43,6 +43,7 @@
   },
   "homepage": "https://github.com/hmsk/vite-plugin-markdown/tree/main/#readme",
   "dependencies": {
+    "dom-serializer": "^2.0.0",
     "domhandler": "^5.0.0",
     "front-matter": "^4.0.0",
     "htmlparser2": "^9.0.0",
@@ -61,7 +62,9 @@
     "@vue/compiler-sfc": "3.5.12",
     "cypress": "13.15.1",
     "eslint": "8.56.0",
+    "rollup": "^4.41.1",
     "typescript": "5.3.3",
     "vite": "5.4.10"
-  }
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }

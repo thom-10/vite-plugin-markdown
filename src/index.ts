@@ -2,8 +2,10 @@ import Frontmatter, { FrontMatterResult } from 'front-matter'
 import MarkdownIt, { Options as MarkdownItOptions } from 'markdown-it'
 import { Plugin } from 'vite'
 import { TransformResult } from 'rollup'
-import { parseDOM, DomUtils } from 'htmlparser2'
+import { parseDOM, DomUtils, parseDocument } from 'htmlparser2'
 import { Element, Node as DomHandlerNode } from 'domhandler'
+import render from 'dom-serializer'
+
 
 export enum Mode {
   TOC = 'toc',
@@ -11,12 +13,18 @@ export enum Mode {
   REACT = 'react',
   VUE = 'vue',
   MARKDOWN = 'markdown',
+  CONTENT_UNSTABLE = 'content',
 }
 
 export interface PluginOptions {
   mode?: Mode[]
   markdown?: (body: string) => string
   markdownIt?: MarkdownIt | MarkdownItOptions
+}
+
+export interface MdItem {
+  level: string;
+  content: string;
 }
 
 const markdownCompiler = (options: PluginOptions): MarkdownIt | { render: (body: string) => string } => {
@@ -57,15 +65,15 @@ const tf = async (code: string, id: string, options: PluginOptions): Promise<Tra
   content.addContext(`const attributes = ${JSON.stringify(fm.attributes)}`)
   content.addExporting('attributes')
 
+  if (options.mode?.includes(Mode.MARKDOWN)) {
+    content.addContext(`const markdown = ${JSON.stringify(fm.body)}`)
+    content.addExporting('markdown')
+  }
+
   const html = markdownCompiler(options).render(fm.body)
   if (options.mode?.includes(Mode.HTML)) {
     content.addContext(`const html = ${JSON.stringify(html)}`)
     content.addExporting('html')
-  }
-
-  if (options.mode?.includes(Mode.MARKDOWN)) {
-    content.addContext(`const markdown = ${JSON.stringify(fm.body)}`)
-    content.addExporting('markdown')
   }
 
   if (options.mode?.includes(Mode.TOC)) {
@@ -74,13 +82,28 @@ const tf = async (code: string, id: string, options: PluginOptions): Promise<Tra
       rootSibling => rootSibling instanceof Element && ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(rootSibling.tagName)
     ) as Element[]
 
-    const toc: { level: string; content: string }[] = indicies.map(index => ({
+    const toc: MdItem[] = indicies.map(index => ({
       level: index.tagName.replace('h', ''),
       content: DomUtils.getInnerHTML(index),
     }))
 
     content.addContext(`const toc = ${JSON.stringify(toc)}`)
     content.addExporting('toc')
+  }
+
+  if (options.mode?.includes(Mode.CONTENT_UNSTABLE)) {
+    const nodes = parseDocument(html).childNodes
+    const indicies = nodes.filter(
+      rootSibling => rootSibling instanceof Element
+    ) as Element[]
+
+    const contents: MdItem[] = indicies.map(index => ({
+      level: index.tagName,
+      content: render(index),
+    }))
+
+    content.addContext(`const content = ${JSON.stringify(contents)}`)
+    content.addExporting('content')
   }
 
   if (options.mode?.includes(Mode.REACT)) {
