@@ -5,6 +5,13 @@
 
 A plugin enables you to import a Markdown file as various formats on your [vite](https://github.com/vitejs/vite) project.
 
+## Fork-Info
+
+- This is a fork of [hmsk/vite-plugin-markdown](https://github.com/hmsk/vite-plugin-markdown). (The 3.0 beta, to be precice)
+- It has some updated dependencies and replaces some deprecated methods.
+- Main reason for the fork is the addition of `MODE.CONTENT_UNSTABLE`. With this you get an Array similar to `MODE.TOC`, but with all items, and the content can be another array of items (e.g. list-elements).
+- see exported type `MdItem`
+
 ## Setup
 
 ```
