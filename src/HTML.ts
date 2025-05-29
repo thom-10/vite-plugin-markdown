@@ -11,7 +11,6 @@ export class HTML {
 
   static getInner(node: DomHandlerAny, options: DomSerializerOptions) {
     return (node instanceof DomHandlerNode &&  this.hasChildren(node))
-        // @ts-expect-error After the check it dfntly has children
         ? node.children.map((node: DomHandlerChild) => this.getOuter(node, options)).join('')
         : ''
   }

@@ -15,9 +15,8 @@ export function extractItems(nodes: DomHandlerChild[], filter: string[], replace
       ? extractItems(index.childNodes, filter, replace)
       : textContent(index)
 
-
     return {
-      level: replace ? index.tagName.replace('h', ''): index.tagName,
+      level: replace ? index.tagName.replace('h', '') : index.tagName,
       content: contentValue,
     }
   })
