@@ -1,18 +1,19 @@
 import { textContent } from 'domutils'
+import { Element as DomHandlerElement } from 'domhandler'
 
+import type { ChildNode as DomHandlerChild } from 'domhandler'
 import type { MdItem } from './index.js'
-import type { AnyNode } from 'domhandler'
 
-export function extractItems(nodes: ChildNode[], filter: string[], replace: boolean): MdItem[] {
+export function extractItems(nodes: DomHandlerChild[], filter: string[], replace: boolean): MdItem[] {
   const indicies = nodes.filter(
-    rootSibling => rootSibling instanceof Element && (filter.length === 0 || filter.includes(rootSibling.tagName))
-  ) as unknown as Element[]
+    rootSibling => rootSibling instanceof DomHandlerElement && (filter.length === 0 || filter.includes(rootSibling.tagName))
+  ) as DomHandlerElement[]
 
   return indicies.map<MdItem>(index => {
-    const recureNodes = ['ul']
+    const recureNodes = ['ul', 'ol']
     const contentValue = recureNodes.includes(index.tagName)
-      ? extractItems(index.childNodes as unknown as ChildNode[], filter, replace)
-      : textContent(index as unknown as AnyNode)
+      ? extractItems(index.childNodes, filter, replace)
+      : textContent(index)
 
 
     return {

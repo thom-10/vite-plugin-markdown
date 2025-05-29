@@ -1,6 +1,8 @@
-import { DomUtils, parseDocument } from 'htmlparser2'
+import { parseDocument } from 'htmlparser2'
+import { Element as DomHandlerElement } from 'domhandler'
+import { HTML } from './HTML.js'
 
-import { Element, type Node as DomHandlerNode } from 'domhandler'
+import type { Node as DomHandlerNode } from 'domhandler'
 
 export async function extractReact(html: string) {
 // if (options.mode?.includes(Mode.REACT)) {
@@ -8,7 +10,7 @@ export async function extractReact(html: string) {
     const subComponentNamespace = 'SubReactComponent'
 
     const markCodeAsPre = (node: DomHandlerNode): void => {
-      if (node instanceof Element) {
+      if (node instanceof DomHandlerElement) {
         if (node.tagName.match(/^[A-Z].+/)) {
           node.tagName = `${subComponentNamespace}.${node.tagName}`
         }
@@ -18,7 +20,7 @@ export async function extractReact(html: string) {
         }
 
         if (node.tagName === 'code') {
-          const codeContent = DomUtils.getInnerHTML(node, { decodeEntities: true })
+          const codeContent = HTML.getInner(node, { decodeEntities: true })
           node.attribs.dangerouslySetInnerHTML = `vfm{{ __html: \`${codeContent.replace(/([\\`])/g, '\\$1')}\`}}vfm`
           node.childNodes = []
         }
@@ -30,7 +32,7 @@ export async function extractReact(html: string) {
     }
     root.forEach(markCodeAsPre)
 
-    const h = DomUtils.getOuterHTML(root, { selfClosingTags: true }).replace(/"vfm{{/g, '{{').replace(/}}vfm"/g, '}}')
+    const h = HTML.getOuter(root, { selfClosingTags: true }).replace(/"vfm{{/g, '{{').replace(/}}vfm"/g, '}}')
 
     const reactCode = `
       const markdown =

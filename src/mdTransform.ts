@@ -8,16 +8,9 @@ import { ExportedContent } from './ExportedContent.js'
 import { extractItems } from './extractItems.js'
 import { extractReact } from './extractReact.js'
 
+import { Mode } from './index.js'
 import type { PluginOptions, MdItem } from './index.js'
 
-export enum Mode {
-  TOC = 'toc',
-  HTML = 'html',
-  REACT = 'react',
-  VUE = 'vue',
-  MARKDOWN = 'markdown',
-  CONTENT_UNSTABLE = 'content',
-}
 
 export const mdtransform = async (code: string, id: string, options: PluginOptions): Promise<TransformResult> => {
   if (!id.endsWith('.md')) return null
@@ -46,7 +39,7 @@ export const mdtransform = async (code: string, id: string, options: PluginOptio
     content.addExporting('toc')
   }
 
-  if (options.mode?.includes(Mode.CONTENT_UNSTABLE)) {
+  if (options.mode?.includes(Mode.CONTENT)) {
     const nodes = parseDocument(html).childNodes as unknown as ChildNode[]
     const contents: MdItem[] = extractItems(nodes, [], false)
 
