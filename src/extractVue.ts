@@ -1,6 +1,6 @@
 import { DomUtils, parseDocument } from 'htmlparser2'
-
 import { Element as DomHandlerElement } from 'domhandler'
+
 import type { ChildNode as DomHandlerChild} from 'domhandler'
 
 export async function extractVue(html: string, id: string) {

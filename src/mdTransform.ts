@@ -49,13 +49,16 @@ export const mdTransform = async (code: string, id: string, mode: Mode[], mdRend
   if (mode?.includes(Mode.REACT)) {
     const compiledReactCode = await extractReact(getHtml())
     
+    content.addInternal('import React from "react"')
     content.addExport('ReactComponent', compiledReactCode)
   }
 
   if (mode?.includes(Mode.VUE)) {
-    const compiledReactCode = await extractVue(getHtml(), id)
+    const compiledVueCode = await extractVue(getHtml(), id)
     
-    content.addExport('VueComponent', compiledReactCode)
+    content.addInternal(`${compiledVueCode}`)
+    content.addExport('VueComponent', '')
+    content.addExport('VueComponentWith', '')
   }
   
   return {
