@@ -7,6 +7,7 @@ A plugin enables you to import a Markdown file as various formats on your [vite]
 
 - This is a fork of [hmsk/vite-plugin-markdown](https://github.com/hmsk/vite-plugin-markdown). (The 3.0 beta, to be precice)
 - It has some updated dependencies and replaces some deprecated methods.
+- The typescript source can be imported directly
 - There is NO npm-package of this version yet!
 - Main reason for the fork is the addition of `MODE.CONTENT`. With this you get an Array similar to `MODE.TOC`, but with all items, and the content can be another array of items (e.g. list-elements).
 - see exported type `MdItem`
@@ -14,21 +15,24 @@ A plugin enables you to import a Markdown file as various formats on your [vite]
 ## Setup
 
 ```
-npm i -D vite-plugin-markdown
+npm i -D thom-10/vite-plugin-markdown
+pnpm add -D thom-10/vite-plugin-markdown
 ```
-
-<details>
-<summary>For vite v1</summary>
-
-```
-npm i -D vite-plugin-markdown@vite-1
-```
-</details>
 
 ### Config
 
 ```js
 import mdPlugin from 'vite-plugin-markdown'
+
+module.exports = {
+  plugins: [mdPlugin(options)]
+}
+```
+
+#### Alternative: Import the typescript source directly:
+
+```ts
+import mdPlugin from 'vite-plugin-markdown/ts'
 
 module.exports = {
   plugins: [mdPlugin(options)]
