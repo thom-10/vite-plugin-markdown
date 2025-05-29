@@ -32,7 +32,7 @@ export const mdtransform = async (code: string, id: string, options: PluginOptio
   }
 
   if (options.mode?.includes(Mode.TOC)) {
-    const nodes = parseDocument(html).childNodes as unknown as ChildNode[]
+    const nodes = parseDocument(html).childNodes
     const toc: MdItem[] = extractItems(nodes, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'], true)
 
     content.addContext(`const toc = ${JSON.stringify(toc)}`)
@@ -40,7 +40,7 @@ export const mdtransform = async (code: string, id: string, options: PluginOptio
   }
 
   if (options.mode?.includes(Mode.CONTENT)) {
-    const nodes = parseDocument(html).childNodes as unknown as ChildNode[]
+    const nodes = parseDocument(html).childNodes
     const contents: MdItem[] = extractItems(nodes, [], false)
 
     content.addContext(`const content = ${JSON.stringify(contents)}`)

@@ -1,7 +1,7 @@
 import renderHTML from 'dom-serializer'
-import { hasChildren } from 'domhandler'
+import { Node as DomHandlerNode, hasChildren } from 'domhandler'
 
-import type { AnyNode as DomHandlerAny, Node as DomHandlerNode } from 'domhandler'
+import type { AnyNode as DomHandlerAny, ChildNode as DomHandlerChild } from 'domhandler'
 import type { DomSerializerOptions } from 'dom-serializer'
 
 export class HTML {
@@ -10,8 +10,9 @@ export class HTML {
   }
 
   static getInner(node: DomHandlerAny, options: DomSerializerOptions) {
-    return this.hasChildren(node)
-        ? node.children.map((node) => this.getOuter(node, options)).join('')
+    return (node instanceof DomHandlerNode &&  this.hasChildren(node))
+        // @ts-expect-error After the check it dfntly has children
+        ? node.children.map((node: DomHandlerChild) => this.getOuter(node, options)).join('')
         : ''
   }
 
