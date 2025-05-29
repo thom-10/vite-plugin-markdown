@@ -1,9 +1,17 @@
 import { mdtransform } from './mdTransform.js'
-import { Mode } from './mdTransform.js'
 
 import type MarkdownIt from 'markdown-it'
 import type { Options as MarkdownItOptions } from 'markdown-it'
 import type { Plugin } from 'vite'
+
+export enum Mode {
+  TOC = 'toc',
+  HTML = 'html',
+  REACT = 'react',
+  VUE = 'vue',
+  MARKDOWN = 'markdown',
+  CONTENT = 'content',
+}
 
 export interface PluginOptions {
   mode?: Mode[]
@@ -19,13 +27,11 @@ export interface MdItem {
 export const plugin = (options: PluginOptions = {}): Plugin => {
   return {
     name: 'vite-plugin-markdown',
-    // enforce: 'pre',
+    enforce: 'pre',
     transform (code, id) {
       return mdtransform(code, id, options)
     },
   }
 }
-
-export {Mode}
 
 export default plugin
