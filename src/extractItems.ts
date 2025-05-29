@@ -10,7 +10,7 @@ export function extractItems(nodes: DomHandlerChild[], filter: string[], replace
   ) as DomHandlerElement[]
 
   return indicies.map<MdItem>(index => {
-    const recureNodes = ['ul', 'ol']
+    const recureNodes = ['ul', 'ol', 'blockquote']
     const contentValue = recureNodes.includes(index.tagName)
       ? extractItems(index.childNodes, filter, replace)
       : textContent(index)
