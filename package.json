@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "dev": "tsc -w -p .",
-    "build": "rm -rf dist && tsc -p .",
+    "build": "rimraf dist && tsc -p .",
     "lint": "eslint . --ext .ts",
     "test:acceptance": "npm run cypress:run",
     "cypress:run": "cypress run --config-file test/acceptance/cypress.json",
@@ -70,6 +70,7 @@
     "@typescript-eslint/parser": "8.33.0",
     "cypress": "14.4.0",
     "eslint": "9.27.0",
+    "rimraf": "^6.1.2",
     "rollup": "^4.41.1",
     "typescript": "5.8.3",
     "vite": "5.4.10"
