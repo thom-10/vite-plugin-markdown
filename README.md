@@ -1,6 +1,5 @@
 # vite-plugin-markdown
 
-
 A plugin enables you to import a Markdown file as various formats on your [vite](https://github.com/vitejs/vite) project.
 
 ## Fork-Info
@@ -22,21 +21,21 @@ pnpm add -D thom-10/vite-plugin-markdown
 ### Config
 
 ```js
-import mdPlugin from 'vite-plugin-markdown'
+import mdPlugin from 'vite-plugin-markdown';
 
 module.exports = {
-  plugins: [mdPlugin(options)]
-}
+    plugins: [mdPlugin(options)],
+};
 ```
 
 #### Alternative: Import the typescript source directly:
 
 ```ts
-import mdPlugin from 'vite-plugin-markdown/ts'
+import mdPlugin from 'vite-plugin-markdown/ts';
 
 module.exports = {
-  plugins: [mdPlugin(options)]
-}
+    plugins: [mdPlugin(options)],
+};
 ```
 
 Then you can import front matter attributes from `.md` file as default.
@@ -46,9 +45,9 @@ Then you can import front matter attributes from `.md` file as default.
 title: Awesome Title
 description: Describe this awesome content
 tags:
-  - "great"
-  - "awesome"
-  - "rad"
+    - 'great'
+    - 'awesome'
+    - 'rad'
 ---
 
 # This is awesome
@@ -59,12 +58,13 @@ Vite is an opinionated web dev build tool that serves your code via native ES Mo
 ```ts
 import { attributes } from './contents/the-doc.md';
 
-console.log(attributes) //=> { title: 'Awesome Title', description: 'Describe this awesome content', tags: ['great', 'awesome', 'rad'] }
+console.log(attributes); //=> { title: 'Awesome Title', description: 'Describe this awesome content', tags: ['great', 'awesome', 'rad'] }
 ```
 
 ### Options
+
 ```ts
-mode?: ('html' | 'markdown' | 'toc' | 'react' | 'vue')[]
+mode?: ('html' | 'toc' | 'content' | 'react' | 'vue')[]
 markdown?: (body: string) => string // If you want to use your own markdown compiler (used only if markdonIt not set)
 markdownIt?: MarkdownIt | MarkdownIt.Options // If you want to use your own config of Markdown-It instead of the internal
 ```
@@ -72,29 +72,36 @@ markdownIt?: MarkdownIt | MarkdownIt.Options // If you want to use your own conf
 Enum for `mode` is provided as `Mode`
 
 ```ts
-import { Mode } from 'vite-plugin-markdown'
+import { Mode } from 'vite-plugin-markdown';
 
-console.log(Mode.TOC) //=> 'toc'
-console.log(Mode.CONTENT) //=> 'content'
-console.log(Mode.HTML) //=> 'html'
-console.log(Mode.REACT) //=> 'react'
-console.log(Mode.VUE) //=> 'vue'
+console.log(Mode.TOC); //=> 'toc'
+console.log(Mode.CONTENT); //=> 'content'
+console.log(Mode.HTML); //=> 'html'
+console.log(Mode.REACT); //=> 'react'
+console.log(Mode.VUE); //=> 'vue'
 ```
 
 "Mode" enables you to import markdown file in various formats (HTML, ToC, React/Vue Component)
 
-#### `Mode.MARKDOWN`
+#### `Mode.MARKDOWN (default)`
 
-thom-10: As the markdown data has to be read in any case. I removed the Mode.option for it. It is alway exported. Just leave it unused, if you don't need it
+thom-10: As the markdown data has to be read in any case. I removed the Mode-option for it. It is alway exported. Just leave it unused, if you don't need it
 
 <details>
   <summary>Import the raw Markdown content</summary>
 
 ```js
-import { markdown } from './contents/the-doc.md'
-
-console.log(markdown) //=> "# This is awesome \n Vite is an opinionated web dev build tool that serves your code via native ES Module imports during dev and bundles it with Rollup for production."
+import { markdown } from './contents/the-doc.md';
 ```
+
+result
+
+```md
+# This is awesome
+
+Vite is an opinionated web dev build tool that serves your code via native ES Module imports during dev and bundles it with Rollup for production.
+```
+
 </details>
 
 #### `Mode.HTML`
@@ -111,7 +118,7 @@ Vite is an opinionated web dev build tool that serves your code via native ES Mo
 ```ts
 import { html } from './contents/the-doc.md';
 
-console.log(html) //=> "<h1>This is awesome</h1><p>ite is an opinionated web dev build tool that serves your code via native ES Module imports during dev and bundles it with Rollup for production.</p>"
+console.log(html); //=> "<h1>This is awesome</h1><p>ite is an opinionated web dev build tool that serves your code via native ES Module imports during dev and bundles it with Rollup for production.</p>"
 ```
 
 </details>
@@ -133,10 +140,21 @@ Vite is an opinionated web dev build tool that serves your code via native ES Mo
 # Notes
 ```
 
-```ts
-import { toc } from './contents/the-doc.md'
+import
 
-console.log(toc) //=> [{ level: '1', content: 'vite' }, { level: '2', content: 'Status' }, { level: '2', content: 'Getting Started' }, { level: '1', content: 'Notes' },]
+```ts
+import { toc } from './contents/the-doc.md';
+```
+
+result
+
+```json
+[
+    { "level": 1, "content": "vite" },
+    { "level": 2, "content": "Status" },
+    { "level": 2, "content": "Getting Started" },
+    { "level": 1, "content": "Notes" }
+]
 ```
 
 </details>
@@ -148,6 +166,44 @@ console.log(toc) //=> [{ level: '1', content: 'vite' }, { level: '2', content: '
 
 Similar to Mode.TOC but includes all tags. Not just the headings.  
 content-value could be array. (e.g. with li-tags)
+
+```md
+# vite
+
+Vite is an opinionated web dev build tool that serves your code via native ES Module imports during dev and bundles it with Rollup for production.
+
+## Status
+
+- great
+- awesome
+- rad
+
+## Getting Started
+
+# Notes
+```
+
+import
+
+```ts
+import { content } from './contents/the-doc.md';
+```
+
+result
+
+```json
+[
+    { "tag": "h1", "content": "vite" },
+    { "tag": "h2", "content": "Status" },
+    { "tag": "ul", "content": [
+      { "tag": "li", "content": "great" },
+      { "tag": "li", "content": "awesome" },
+      { "tag": "li", "content": "rad" },
+    ]}
+    { "tag": "h2", "content": "Getting Started" },
+    { "tag": "h1", "content": "Notes" }
+]
+```
 
 </details>
 
@@ -202,18 +258,18 @@ function MyReactApp() {
 
 ```vue
 <template>
-  <article>
-    <markdown-content />
-  </article>
+    <article>
+        <markdown-content />
+    </article>
 </template>
 
 <script>
-import { VueComponent } from './contents/the-doc.md'
+import { VueComponent } from './contents/the-doc.md';
 
 export default {
-  components: {
-    MarkdownContent: VueComponent
-  }
+    components: {
+        MarkdownContent: VueComponent,
+    },
 };
 </script>
 ```
@@ -229,19 +285,19 @@ Vite is <MyComponent :type="'vue'">
 
 ```vue
 <template>
-  <article>
-    <markdown-content />
-  </article>
+    <article>
+        <markdown-content />
+    </article>
 </template>
 
 <script>
-import { VueComponentWith } from './contents/the-doc.md'
-import MyComponent from './my-component.vue'
+import { VueComponentWith } from './contents/the-doc.md';
+import MyComponent from './my-component.vue';
 
 export default {
-  components: {
-    MarkdownContent: VueComponentWith({ MyComponent })
-  }
+    components: {
+        MarkdownContent: VueComponentWith({ MyComponent }),
+    },
 };
 </script>
 ```
@@ -251,43 +307,58 @@ export default {
 </details>
 </details>
 
-
 ### Type declarations
 
 In TypeScript project, need to declare typedefs for `.md` file as you need.
 
 ```ts
 declare module '*.md' {
-  // typing of this can be replaced with whatever the structure of your metadata is
-  // for example: { title: string; description: string; keywords?: string[] }
-  const attributes: Record<string, unknown>; 
+    /*  
+      typing of this can be replaced with whatever the structure of your metadata is
+      for example: { title: string; description: string; keywords?: string[] } 
+    */
+    const attributes: Record<string, unknown>;
 
-  // Always exported
-  const markdown: string
+    // Always exported
+    const markdown: string;
 
-  // interface MdItem { level: string, content: string | MdItem[] }
-  import type { MdItem } from "vite-plugin-markdown"; 
+    /*  
+      When "Mode.TOC" is requested
+      TocItem { level: number, content: string }
+    */
+    const toc: import('vite-plugin-markdown').TocItem[];
 
-  // When "Mode.TOC" is requested
-  const toc: MdItem [];
+    /*  
+      When "Mode.CONTENT" is requested
+      TagItem { tag: string, content: string | TagItem[] }
+    */
+    const content: import('vite-plugin-markdown').TagItem[];
 
-  // When "Mode.CONTENT" is requested
-  const content: MdItem [];
+    // When "Mode.HTML" is requested
+    const html: string;
 
-  // When "Mode.HTML" is requested
-  const html: string;
+    // When "Mode.React" is requested. VFC could take a generic like React.VFC<{ MyComponent: TypeOfMyComponent }>
+    import type React from 'react';
+    const ReactComponent: React.VFC;
 
-  // When "Mode.React" is requested. VFC could take a generic like React.VFC<{ MyComponent: TypeOfMyComponent }>
-  import type React from 'react'
-  const ReactComponent: React.VFC;
-  
-  // When "Mode.Vue" is requested
-  import type { ComponentOptions, Component } from 'vue';
-  const VueComponent: ComponentOptions;
-  const VueComponentWith: (components: Record<string, Component>) => ComponentOptions;
+    // When "Mode.Vue" is requested
+    import type { ComponentOptions, Component } from 'vue';
+    const VueComponent: ComponentOptions;
+    const VueComponentWith: (
+        components: Record<string, Component>
+    ) => ComponentOptions;
 
-  // Modify below per your usage
-  export { attributes, markdown, toc, content, html, ReactComponent, VueComponent, VueComponentWith };
+    // Modify below per your usage
+    export {
+        attributes,
+        markdown,
+        toc,
+        content,
+        html,
+        ReactComponent,
+        VueComponent,
+        VueComponentWith,
+    };
 }
 ```
 
