@@ -1,11 +1,10 @@
 ---
 title: It's Vue sample
-description:
-  This repository is created to run acceptance tests with Vue 3
+description: This repository is created to run acceptance tests with Vue 3
 tags:
-  - Vue
-  - vite
-  - FML
+    - Vue
+    - vite
+    - FML
 ---
 
 # Hello
@@ -15,16 +14,20 @@ tags:
 Echo
 
 ```js
-{{ something.value }}
+{
+    {
+        something.value;
+    }
+}
 
 getSomething().then((response) => {
-  const result = parse(response)
-})
+    const result = parse(response);
+});
 
-a = `b`
-b = "\n"
+a = `b`;
+b = '\n';
 
-console.log("&copy;");
+console.log('&copy;');
 ```
 
 &copy; : this is HTML special chars

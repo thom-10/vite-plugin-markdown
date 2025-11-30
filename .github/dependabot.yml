@@ -1,15 +1,15 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
-    directory: '/'
-    schedule:
-      interval: 'weekly'
-    ignore:
-      - dependency-name: '@types/node'
-        versions:
-          - 22.x
-    groups:
-      eslint-family:
-        patterns:
-          - 'eslint'
-          - '@typescript-eslint/*'
+    - package-ecosystem: 'npm'
+      directory: '/'
+      schedule:
+          interval: 'weekly'
+      ignore:
+          - dependency-name: '@types/node'
+            versions:
+                - 22.x
+      groups:
+          eslint-family:
+              patterns:
+                  - 'eslint'
+                  - '@typescript-eslint/*'

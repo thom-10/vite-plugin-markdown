@@ -1,16 +1,16 @@
 {
-  "name": "vite-plugin-markdown-sample-vue",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@vitejs/plugin-vue": "5.0.3",
-    "vite": "5.4.10",
-    "vite-plugin-markdown": "file:../.."
-  }
+    "name": "vite-plugin-markdown-sample-vue",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@vitejs/plugin-vue": "5.0.3",
+        "vite": "5.4.10",
+        "vite-plugin-markdown": "file:../.."
+    }
 }
