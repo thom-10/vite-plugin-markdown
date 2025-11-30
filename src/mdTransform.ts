@@ -2,7 +2,7 @@ import fm from 'front-matter';
 import { parseDocument } from 'htmlparser2';
 import type { TransformResult } from 'rollup';
 import { ExportedContent } from './ExportedContent.js';
-import type { MdItem } from './extractItems.js';
+import type { TocItem, TagItem } from './extractItems.js';
 import { extractItems } from './extractItems.js';
 import { extractReact } from './extractReact.js';
 import { extractVue } from './extractVue.js';
@@ -45,7 +45,7 @@ const mdTransform = async (
 
     if (mode?.includes(Mode.TOC)) {
         const nodes = parseDocument(getHtml()).childNodes;
-        const items: MdItem[] = extractItems(
+        const items: TocItem[] = extractItems(
             nodes,
             ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
             true
@@ -56,7 +56,7 @@ const mdTransform = async (
 
     if (mode?.includes(Mode.CONTENT)) {
         const nodes = parseDocument(getHtml()).childNodes;
-        const items: MdItem[] = extractItems(nodes, [], false);
+        const items: TagItem[] = extractItems(nodes, [], false);
 
         content.addExport(Mode.CONTENT, JSON.stringify(items));
     }
