@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-export default function LinkToRepository({ color, children }) {
+export default function LinkToRepository({
+    color,
+    children,
+}: {
+    color: string;
+    children: ReactNode;
+}) {
     const style = { color: color || '#eee' };
     return (
         <a

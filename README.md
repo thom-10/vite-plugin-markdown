@@ -312,6 +312,7 @@ export default {
 In TypeScript project, need to declare typedefs for `.md` file as you need.
 
 ```ts
+// markdown.d.ts
 declare module '*.md' {
     /*  
       typing of this can be replaced with whatever the structure of your metadata is
