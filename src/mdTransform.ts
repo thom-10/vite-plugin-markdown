@@ -62,18 +62,11 @@ const mdTransform = async (
     }
 
     if (mode?.includes(Mode.REACT)) {
-        const compiledReactCode = await extractReact(getHtml());
-
-        content.addInternal('import React from "react"');
-        content.addExport('ReactComponent', compiledReactCode);
+        await extractReact(getHtml(), content);
     }
 
     if (mode?.includes(Mode.VUE)) {
-        const compiledVueCode = await extractVue(getHtml(), id);
-
-        content.addInternal(`${compiledVueCode}`);
-        content.addExport('VueComponent', '');
-        content.addExport('VueComponentWith', '');
+        await extractVue(getHtml(), id, content);
     }
 
     return {

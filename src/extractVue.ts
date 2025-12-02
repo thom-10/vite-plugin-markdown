@@ -2,8 +2,13 @@ import { DomUtils, parseDocument } from 'htmlparser2';
 import { Element as DomHandlerElement } from 'domhandler';
 
 import type { ChildNode as DomHandlerChild } from 'domhandler';
+import { ExportedContent } from './ExportedContent.js';
 
-export async function extractVue(html: string, id: string) {
+export async function extractVue(
+    html: string,
+    id: string,
+    content: ExportedContent
+) {
     const root = parseDocument(html).childNodes;
 
     const isElement = (value: DomHandlerChild): value is DomHandlerElement => {
@@ -36,11 +41,19 @@ export async function extractVue(html: string, id: string) {
         filename: id,
         id,
     });
-    return (
+
+    content.addInternal(
         compiledVueCode.replace(
             '\nexport function render(',
             '\nfunction vueRender('
-        ) +
-        `\nconst VueComponent = { render: vueRender }\nVueComponent.__hmrId = ${JSON.stringify(id)}\nconst VueComponentWith = (components) => ({ components, render: vueRender })`
+        )
+    );
+    content.addExport(
+        'VueComponent',
+        `{ render: vueRender }\nVueComponent.__hmrId = ${JSON.stringify(id)}`
+    );
+    content.addExport(
+        'VueComponentWith',
+        '(components) => ({ components, render: vueRender })'
     );
 }
